@@ -1,47 +1,31 @@
-GameManager gameManager;
+GameManager gm;
 
 void setup() {
-  size(800, 600, P3D); 
-  println(" making Processing Sketch");
-  gameManager = new GameManager();
-  gameManager.init();
-  textAlign(LEFT, TOP);
-  textSize(16);
+  size(960, 540);
+  gm = new GameManager();
+  gm.init();
 }
 
 void draw() {
-  background(50, 80, 100); 
-
-  gameManager.update();
-  gameManager.draw();
+  gm.update();
 }
 
 void keyPressed() {
-  if (gameManager != null && gameManager.currentScene != null) {
-    gameManager.currentScene.handleKeyPressed(key, keyCode);
-  }
+  gm.handleKey(key, keyCode, true);
 }
 
-void keyReleased() { 
-  if (gameManager != null && gameManager.currentScene != null) {
-    gameManager.currentScene.handleKeyReleased(key, keyCode);
-  }
+void keyReleased() {
+  gm.handleKey(key, keyCode, false);
 }
 
 void mousePressed() {
-  if (gameManager != null && gameManager.currentScene != null) {
-    gameManager.currentScene.handleMousePressed(mouseButton, mouseX, mouseY);
-  }
+  gm.handleMouse(true);
 }
 
 void mouseReleased() {
-  if (gameManager != null && gameManager.currentScene != null) {
-    gameManager.currentScene.handleMouseReleased(mouseButton, mouseX, mouseY);
-  }
+  gm.handleMouse(false);
 }
 
 void mouseDragged() {
-  if (gameManager != null && gameManager.currentScene != null) {
-    gameManager.currentScene.handleMouseDragged(mouseX, mouseY);
-  }
+  gm.handleDrag();
 }

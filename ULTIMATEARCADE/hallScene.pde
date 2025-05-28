@@ -1,53 +1,28 @@
 class HallScene extends Scene {
-  ArrayList<CabinetRep> cabinets;
-  Player player;
-  UIOverlay tutorialOverlay;
-  boolean showTutorial = true;
-  float camPan = 0; 
-  HallScene(GameManager manager) {
-    super(manager);
-    cabinets = new ArrayList<CabinetRep>();
-    player = new Player(new PVector(0, 0, 0), new KeyBinds()); 
-    tutorialOverlay = new UIOverlay();
-    println("HallScene: Initialized");
+  ArrayList<CabinetScene> cabinets = new ArrayList<CabinetScene>();
+  Player player = new Player();
+  HallScene() {
+    cabinets.add(new MiniGolf());
+    cabinets.get(0).cabPos = new PVector(500, 300);
   }
 
-  @Override
-  void enter() {
-    super.enter();
-    println("HallScene: Loading player and cabinets...");
-    player.position = new PVector(0, 20, 250); 
-    cabinets.clear(); 
-    cabinets.add(new CabinetRep("MiniGolf", new PVector(-200, 0, -100), this)); 
-    cabinets.add(new CabinetRep("TetrisGame", new PVector(0, 0, -150), this));
-    cabinets.add(new CabinetRep("ArcheryGame", new PVector(200, 0, -100), this));
-    if (showTutorial) {
-      tutorialOverlay.clearMessages();
-      tutorialOverlay.showMessage("Welcome to ULTIMATE-ARCADE!");
-      tutorialOverlay.showMessage("W/S: Move Fwd/Back | A/D: Strafe Left/Right");
-      tutorialOverlay.showMessage("Mouse: Look Around (Basic)");
-      tutorialOverlay.showMessage("Walk to a cabinet (highlighted) and press 'E' to play.");
-      tutorialOverlay.showMessage("Press 'T' to toggle this tutorial.");
-    }
-  }
-
-  @Override
   void update() {
-    super.update();
-    player.updateInHall(camPan); 
-    float lookSensitivity = 0.005;
-    camPan -= (mouseX - pmouseX) * lookSensitivity; 
-    player.wantsToInteract = false; 
-    if (player.interactionKeyPressed) {
-        player.wantsToInteract = true;
-        player.interactionKeyPressed = false; 
-    }
-    for (CabinetRep cabinet : cabinets) {
-      float distToCabinet = dist(player.position.x, player.position.z, cabinet.position.x, cabinet.position.z);
-      cabinet.isPlayerClose = (distToCabinet < 80); 
-      if (cabinet.isPlayerClose && player.wantsToInteract) {
-        cabinet.tryInteract();
-        break; 
-      }
+    player.update();
+  }
+
+  void draw() {
+    background(40);
+    for (CabinetScene c : cabinets) c.drawCabinet();
+    player.draw();
+    fill(255);
+    text("Arrows to move  |  E to enter  |  Q to quit game", 10, 20);
+  }
+  void handleKey(char k, int code, boolean down) {
+    player.key(k, code, down);
+    if (down && (k == 'e' || k == 'E')) {
+      for (CabinetScene c : cabinets)
+        if (c.isNear(player.pos))
+          gm.switchScene(c);
     }
   }
+}

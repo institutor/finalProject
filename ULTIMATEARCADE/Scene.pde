@@ -1,27 +1,20 @@
-class Scene {
-  GameManager manager; 
-
-  Scene(GameManager manager) {
-    this.manager = manager;
-  }
-
+abstract class Scene {
   void enter() {
-    println("Scene (" + this.getClass().getSimpleName() + "): enter() called");
   }
 
   void exit() {
-    println("Scene (" + this.getClass().getSimpleName() + "): exit() called");
   }
 
-  void update() {
+  abstract void update();
+
+  abstract void draw();
+
+  void handleKey(char k, int code, boolean down) {
   }
 
-  void draw() {
+  void handleMouse(boolean pressed) {
   }
 
-  void handleKeyPressed(char key, int keyCode) {}
-  void handleKeyReleased(char key, int keyCode) {} 
-  void handleMousePressed(int mouseButton, int mx, int my) {}
-  void handleMouseReleased(int mouseButton, int mx, int my) {}
-  void handleMouseDragged(int mx, int my) {}
+  void handleDrag() {
+  }
 }
