@@ -15,7 +15,7 @@ class HallScene extends Scene {
     for (CabinetScene c : cabinets) c.drawCabinet();
     player.draw();
     fill(255);
-    text("Arrows to move  |  E to enter  |  Q to quit game", 10, 20);
+    text("                                                                                                    Arrows to move  |  E to enter  |  Q to quit game", 10, 20); // the large indent you see here is a temporary fix for my text going outside of the screen for some reason
   }
   void handleKey(char k, int code, boolean down) {
     player.key(k, code, down);
