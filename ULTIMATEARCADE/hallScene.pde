@@ -3,7 +3,7 @@ class HallScene extends Scene {
   Player player = new Player();
   HallScene() {
     cabinets.add(new MiniGolf());
-    cabinets.get(0).cabPos = new PVector(500, 300);
+    cabinets.get(0).cabPos = new PVector(400, 100);
   }
 
   void update() {

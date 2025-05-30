@@ -6,9 +6,9 @@ class UIOverlay {
   }
   void draw() {
     fill(0, 200);
-    rect(0, 0, width, 50);
+    rect(0, 0, width, 100);
     fill(255);
-    textSize(14);
+    textSize(25);
     textAlign(LEFT, CENTER);
     float y = 25;  
     for (String m : messages) {
