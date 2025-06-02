@@ -5,8 +5,8 @@ class UIOverlay {
     messages.add(m); 
   }
   void draw() {
-    fill(0, 200);
-    rect(0, 0, width, 100);
+    fill(0, 140);
+    rect(0, 0, width, 50);
     fill(255);
     textSize(25);
     textAlign(LEFT, CENTER);
