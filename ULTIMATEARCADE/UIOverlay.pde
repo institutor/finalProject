@@ -1,19 +1,24 @@
 class UIOverlay {
   ArrayList<String> messages = new ArrayList<String>();
-  void add(String m) { 
-    messages.clear();  
-    messages.add(m); 
+  float h = 50;
+  void add(String m) {
+    messages.clear();
+    messages.add(m);
   }
   void draw() {
+    h = max(50, 18 * messages.size() + 14);
     fill(0, 140);
-    rect(0, 0, width, 50);
+    rect(0, 0, width, h);
     fill(255);
     textSize(25);
     textAlign(LEFT, CENTER);
-    float y = 25;  
+    float y = h / 2 - 18 * (messages.size() - 1) / 2;
     for (String m : messages) {
-      text(m, 30, y);  
+      text(m, 30, y);
       y += 18;
     }
   }
+  float getHeight() {
+  return h; 
+}
 }

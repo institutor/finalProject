@@ -1,7 +1,7 @@
 GameManager gm;
 
 void setup() {
-  size(1060, 600);
+  size(1920, 1080);
   gm = new GameManager();
   gm.init();
 }

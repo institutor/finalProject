@@ -3,6 +3,7 @@ class MiniGolf extends CabinetScene {
   boolean dragging;
   PVector dragStart;
   int strokes;
+  int holeStrokes;
   int currentHole = 1;
   int totalHoles = 5;
   boolean ballInHole = false;
@@ -12,21 +13,18 @@ class MiniGolf extends CabinetScene {
   ArrayList<Rectangle> sandTiles = new ArrayList<Rectangle>();
   ArrayList<Rectangle> iceTiles = new ArrayList<Rectangle>();
 
-  MiniGolf() {
-    reset();
-  }
+  MiniGolf() { reset(); }
 
-  String getLabel() {
-    return "Mini-Golf";
-  }
-
-  int getColor() {
-    return color(0, 200, 0);
-  }
+  String getLabel() { 
+  return "Mini-Golf";
+}
+  int getColor() { return color(0, 200, 0); }
 
   void enter() {
     ui.messages.clear();
-    ui.add("Mini-Golf  |  Drag to shoot  |  Q to exit");
+    ui.messages.add("Mini-Golf  |  Drag to shoot  |  Q exit");
+    ui.messages.add("Sand slows  |  Ice is slidey  |  Rocks bounce");
+    ui.messages.add("Cup = black   Ball = white");
     setupHole();
   }
 
@@ -37,38 +35,43 @@ class MiniGolf extends CabinetScene {
     ballInHole = false;
     holeCompleteTimer = 0;
     if (currentHole == 1) {
-      holePos = new PVector(width - 100, height - 100);
-      obstacles.add(new PVector(400, 200));
-      obstacles.add(new PVector(600, 350));
+      holePos = new PVector(width - 150, height - 150); 
+      obstacles.add(new PVector(width * .55f, height * .70f)); // f makes these numbers floats
+      obstacles.add(new PVector(width * .70f, height * .55f));
+      obstacles.add(new PVector(width * .80f, height * .35f));
+      obstacles.add(new PVector(width * .45f, height * .45f));
+      sandTiles.add(new Rectangle(width * .20f, height * .25f, width * .25f, height * .30f));
     } else if (currentHole == 2) {
-      holePos = new PVector(100, 100);
-      obstacles.add(new PVector(300, 150));
-      obstacles.add(new PVector(500, 250));
-      obstacles.add(new PVector(700, 350));
-      sandTiles.add(new Rectangle(0 , height / 2 , 2000, 100));
+      holePos = new PVector(150, 150);
+      obstacles.add(new PVector(width * .35f, height * .20f));
+      obstacles.add(new PVector(width * .60f, height * .35f));
+      obstacles.add(new PVector(width * .80f, height * .55f));
+      sandTiles.add(new Rectangle(0, height * .45f, width, 300));
+      iceTiles.add(new Rectangle(width * .40f, 60, width * .20f, 250));
     } else if (currentHole == 3) {
-      holePos = new PVector(width / 2, 100);
-      obstacles.add(new PVector(200, 200));
-      obstacles.add(new PVector(width / 2, 300));
-      obstacles.add(new PVector(width - 200, 400));
-      iceTiles.add(new Rectangle(width / 4 , height / 2 , 500, 500));
-      iceTiles.add(new Rectangle(width * 3 / 4 , height / 2 , 500, 100));
+      holePos = new PVector(width / 2, 150);
+      obstacles.add(new PVector(width * .25f, height * .30f));
+      obstacles.add(new PVector(width * .50f, height * .60f));
+      obstacles.add(new PVector(width * .75f, height * .30f));
+      iceTiles.add(new Rectangle(width * .10f, height * .50f, width * .80f, 180));
+      sandTiles.add(new Rectangle(width * .45f, height * .78f, width * .10f, 240));
     } else if (currentHole == 4) {
-      holePos = new PVector(50, height / 2);
-      obstacles.add(new PVector(200, 150));
-      obstacles.add(new PVector(200, 400));
-      obstacles.add(new PVector(width - 200, 150));
-      obstacles.add(new PVector(width - 200, 400));
-      sandTiles.add(new Rectangle(width / 2 , 200 , 1000, 100));
-      sandTiles.add(new Rectangle(width / 2 , 300 , 1000, 200));
+      holePos = new PVector(100, height / 2);
+      obstacles.add(new PVector(width * .30f, height * .25f));
+      obstacles.add(new PVector(width * .30f, height * .70f));
+      obstacles.add(new PVector(width * .60f, height * .25f));
+      obstacles.add(new PVector(width * .60f, height * .70f));
+      sandTiles.add(new Rectangle(width * .38f, height * .25f, width * .24f, 450));
+      iceTiles.add(new Rectangle(0, height * .10f, width * .15f, height * .80f));
     } else if (currentHole == 5) {
-      holePos = new PVector(width / 2, height - 200 );
-      obstacles.add(new PVector(100, 200));
-      obstacles.add(new PVector(width - 100, 200));
-      obstacles.add(new PVector(width / 2, 250));
-      iceTiles.add(new Rectangle(250, height / 2 , 1040, 100));
-      iceTiles.add(new Rectangle(300 , height / 2 , 1050, 100));
-      sandTiles.add(new Rectangle(0 , height / 2 + 100 , 10340, 1500));
+      holePos = new PVector(width / 2, height - 250);
+      obstacles.add(new PVector(width * .10f, height * .30f));
+      obstacles.add(new PVector(width * .90f, height * .30f));
+      obstacles.add(new PVector(width * .20f, height * .50f));
+      obstacles.add(new PVector(width * .80f, height * .50f));
+      obstacles.add(new PVector(width * .50f, height * .40f));
+      iceTiles.add(new Rectangle(0, height * .40f, width, 160));
+      sandTiles.add(new Rectangle(0, height * .60f, width, 320));
     }
   }
 
@@ -76,52 +79,30 @@ class MiniGolf extends CabinetScene {
     if (!ballInHole) {
       bx += vx;
       by += vy;
-      float friction = 0.98;
-      for (Rectangle sand : sandTiles) {
-        if (bx > sand.x && bx < sand.x + sand.width && by > sand.y && by < sand.y + sand.height) {
-          friction = 0.90;
-          break;
-        }
-      }
-      for (Rectangle ice : iceTiles) {
-        if (bx > ice.x && bx < ice.x + ice.width && by > ice.y && by < ice.y + ice.height) {
-          friction = 0.992;
-          break;
-        }
-      }
+      float friction = 0.98f;
+      for (Rectangle s : sandTiles)
+        if (bx > s.x && bx < s.x + s.width && by > s.y && by < s.y + s.height) { friction = 0.90f; break; }
+      for (Rectangle i : iceTiles)
+        if (bx > i.x && bx < i.x + i.width && by > i.y && by < i.y + i.height) { friction = 0.992f; break; }
       vx *= friction;
       vy *= friction;
-      if (abs(vx) < 0.1) vx = 0;
-      if (abs(vy) < 0.1) vy = 0;
-      if (bx < 10) {
-        bx = 10;
-        vx *= -0.7;
-      }
-      if (bx > width - 10) {
-        bx = width - 10;
-        vx *= -0.7;
-      }
-      if (by < 60) {
-        by = 60;
-        vy *= -0.7;
-      }
-      if (by > height - 10) {
-        by = height - 10;
-        vy *= -0.7;
-      }
-      for (PVector obs : obstacles) {
-        float d = dist(bx, by, obs.x, obs.y);
+      if (abs(vx) < .1f) vx = 0;
+      if (abs(vy) < .1f) vy = 0;
+      if (bx < 10) { bx = 10; vx *= -0.7f; }
+      if (bx > width - 10) { bx = width - 10; vx *= -0.7f; }
+      if (by < 60) { by = 60; vy *= -0.7f; }
+      if (by > height - 10) { by = height - 10; vy *= -0.7f; }
+      for (PVector o : obstacles) {
+        float d = dist(bx, by, o.x, o.y);
         if (d < 35) {
-          PVector bounce = new PVector(bx - obs.x, by - obs.y);
-          bounce.normalize();
-          bounce.mult(2);
-          vx = bounce.x;
-          vy = bounce.y;
-          bx = obs.x + bounce.x * 35;
-          by = obs.y + bounce.y * 35;
+          PVector b = PVector.sub(new PVector(bx, by), o).normalize().mult(2);
+          vx = b.x;
+          vy = b.y;
+          bx = o.x + b.x * 35;
+          by = o.y + b.y * 35;
         }
       }
-      if (dist(bx, by, holePos.x, holePos.y) < 15 && abs(vx) < 3.5 && abs(vy) < 3.5) {
+      if (dist(bx, by, holePos.x, holePos.y) < 15 && abs(vx) < 3.5f && abs(vy) < 3.5f) {
         ballInHole = true;
         vx = vy = 0;
         holeCompleteTimer = 60;
@@ -134,7 +115,9 @@ class MiniGolf extends CabinetScene {
           reset();
           setupHole();
         } else {
-          ui.add("Course Complete! Final Score: " + strokes + " strokes" + "\n Press Q to exit");
+          ui.messages.clear();
+          ui.messages.add("Course Complete! Final Score: " + strokes + " strokes");
+          ui.messages.add("Press Q to exit");
         }
       }
     }
@@ -142,27 +125,21 @@ class MiniGolf extends CabinetScene {
 
   void draw() {
     background(20, 90, 20);
-    for (Rectangle sand : sandTiles) {
+    for (Rectangle s : sandTiles) {
       fill(210, 180, 140);
-      rect(sand.x, sand.y, sand.width, sand.height);
+      rect(s.x, s.y, s.width, s.height);
     }
-    for (Rectangle ice : iceTiles) {
+    for (Rectangle i : iceTiles) {
       fill(180, 230, 255);
-      rect(ice.x, ice.y, ice.width, ice.height);
+      rect(i.x, i.y, i.width, i.height);
     }
     fill(10, 60, 10);
     ellipse(holePos.x, holePos.y, 30, 30);
     fill(0);
     ellipse(holePos.x, holePos.y, 20, 20);
     fill(139, 70, 19);
-    for (PVector obs : obstacles) {
-      ellipse(obs.x, obs.y, 60, 60);
-    }
-    if (ballInHole) {
-      fill(255, 255, 0);
-    } else {
-      fill(255);
-    }
+    for (PVector o : obstacles) ellipse(o.x, o.y, 60, 60);
+    fill(ballInHole ? color(255, 255, 0) : 255);
     ellipse(bx, by, 20, 20);
     if (dragging && !ballInHole) {
       stroke(0, 255, 0);
@@ -171,10 +148,12 @@ class MiniGolf extends CabinetScene {
       noStroke();
     }
     ui.draw();
+    float top = ui.getHeight();
     fill(255);
     textAlign(LEFT, TOP);
-    text("Hole: " + currentHole + "/" + totalHoles, 10, 60);
-    text("Strokes: " + strokes, 10, 80);
+    text("Hole: " + currentHole + "/" + totalHoles, 10, top + 10);
+    text("Strokes (hole): " + holeStrokes, 10, top + 30);
+    text("Strokes (total): " + strokes, 10, top + 50);
     if (ballInHole && holeCompleteTimer > 30) {
       fill(255, 255, 0);
       textAlign(CENTER, CENTER);
@@ -184,9 +163,9 @@ class MiniGolf extends CabinetScene {
     }
   }
 
-  void handleKey(char k, int code, boolean down) {
-    if (down && (k == 'q' || k == 'Q')) gm.switchScene(new HallScene());
-    if (down && (k == 'r' || k == 'R')) {
+  void handleKey(char k, int c, boolean d) {
+    if (d && (k == 'q' || k == 'Q')) gm.switchScene(new HallScene());
+    if (d && (k == 'r' || k == 'R')) {
       if (currentHole > totalHoles) {
         currentHole = 1;
         strokes = 0;
@@ -196,41 +175,32 @@ class MiniGolf extends CabinetScene {
     }
   }
 
-  void handleMouse(boolean pressed) {
+  void handleMouse(boolean p) {
     if (ballInHole) return;
-    if (pressed) {
-      if (dist(mouseX, mouseY, bx, by) < 15 && abs(vx) < 0.5 && abs(vy) < 0.5) {
+    if (p) {
+      if (dist(mouseX, mouseY, bx, by) < 15 && abs(vx) < .5f && abs(vy) < .5f) {
         dragging = true;
         dragStart = new PVector(mouseX, mouseY);
       }
     } else {
       if (dragging) {
         dragging = false;
-        PVector imp = PVector.sub(dragStart, new PVector(mouseX, mouseY)).mult(0.1);
+        PVector imp = PVector.sub(dragStart, new PVector(mouseX, mouseY)).mult(.1f);
         vx = imp.x;
         vy = imp.y;
         strokes++;
+        holeStrokes++;
       }
     }
   }
 
-  void handleDrag() {
-  }
+  void handleDrag() { }
 
   void reset() {
-    bx = 100;
-    by = height - 100;
+    bx = 200;
+    by = height - 150;
     vx = vy = 0;
     if (currentHole == 1) strokes = 0;
-  }
-}
-
-class Rectangle {
-  float x, y, width, height;
-  Rectangle(float x, float y, float width, float height) {
-    this.x = x;
-    this.y = y;
-    this.width = width;
-    this.height = height;
+    holeStrokes = 0;
   }
 }
