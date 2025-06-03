@@ -40,21 +40,20 @@ class MiniGolf extends CabinetScene {
       obstacles.add(new PVector(width * .70f, height * .55f));
       obstacles.add(new PVector(width * .80f, height * .35f));
       obstacles.add(new PVector(width * .45f, height * .45f));
-      sandTiles.add(new Rectangle(width * .20f, height * .25f, width * .25f, height * .30f));
     } else if (currentHole == 2) {
       holePos = new PVector(150, 150);
       obstacles.add(new PVector(width * .35f, height * .20f));
       obstacles.add(new PVector(width * .60f, height * .35f));
       obstacles.add(new PVector(width * .80f, height * .55f));
       sandTiles.add(new Rectangle(0, height * .45f, width, 300));
-      iceTiles.add(new Rectangle(width * .40f, 60, width * .20f, 250));
+      iceTiles.add(new Rectangle(0, 60, width * 2.0f, 250));
     } else if (currentHole == 3) {
       holePos = new PVector(width / 2, 150);
       obstacles.add(new PVector(width * .25f, height * .30f));
       obstacles.add(new PVector(width * .50f, height * .60f));
       obstacles.add(new PVector(width * .75f, height * .30f));
-      iceTiles.add(new Rectangle(width * .10f, height * .50f, width * .80f, 180));
-      sandTiles.add(new Rectangle(width * .45f, height * .78f, width * .10f, 240));
+      iceTiles.add(new Rectangle(width * 0f, height * .50f, width * 2.8f, 180));
+      sandTiles.add(new Rectangle(width * 0f, height * .78f, width * 2.0f, 240));
     } else if (currentHole == 4) {
       holePos = new PVector(100, height / 2);
       obstacles.add(new PVector(width * .30f, height * .25f));
@@ -62,7 +61,7 @@ class MiniGolf extends CabinetScene {
       obstacles.add(new PVector(width * .60f, height * .25f));
       obstacles.add(new PVector(width * .60f, height * .70f));
       sandTiles.add(new Rectangle(width * .38f, height * .25f, width * .24f, 450));
-      iceTiles.add(new Rectangle(0, height * .10f, width * .15f, height * .80f));
+      iceTiles.add(new Rectangle(0, height * .10f, width * .15f, height * 2.0f));
     } else if (currentHole == 5) {
       holePos = new PVector(width / 2, height - 250);
       obstacles.add(new PVector(width * .10f, height * .30f));

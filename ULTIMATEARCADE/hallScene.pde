@@ -9,7 +9,9 @@ class HallScene extends Scene {
     cabinets.get(1).cabPos = new PVector(700, 100);
   }
 
-  void update() { player.update(); }
+  void update() { 
+    player.update();
+}
 
   void draw() {
     background(40);
