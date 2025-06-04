@@ -2,6 +2,7 @@ GameManager gm;
 
 void setup() {
   size(1920, 1080);
+  fullScreen();
   gm = new GameManager();
   gm.init();
 }

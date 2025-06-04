@@ -2,6 +2,7 @@ class TetrisGame extends CabinetScene {
   int columnCount = 10, rowCount = 20, blockSize = 40;
   int[][] board = new int[rowCount][columnCount];
   int[][][] randShapeShapes = {
+    {{0,0},{0,-1},{0,-2},{0,1}},
     {{0,0},{-1,0},{1,0},{0,1}},
     {{0,0},{-1,0},{1,0},{1,1}},
     {{0,0},{-1,0},{1,0},{-1,1}},
@@ -14,6 +15,7 @@ class TetrisGame extends CabinetScene {
   int randShapeX, randShapeY, randShapeType;
   int frameTick, dropSpeed = 30;
   boolean gameOver;
+  int points;
 
   String getLabel() { 
     return "Tetris"; 
@@ -33,6 +35,7 @@ class TetrisGame extends CabinetScene {
     createNewrandShape();
     gameOver = false;
     frameTick = 0;
+    points = 0;
   }
 
   void createNewrandShape() {
@@ -66,7 +69,6 @@ class TetrisGame extends CabinetScene {
   }
 
   void rotaterandShape() {
-    if (randShapeType == 3) return;
     for (int[] block : activerandShape) {
       int temp = block[0];
       block[0] = -block[1];
@@ -104,6 +106,9 @@ class TetrisGame extends CabinetScene {
         for (int rr = r; rr > 0; rr--) board[rr] = board[rr - 1].clone();
         board[0] = new int[columnCount];
         r++;
+        points += 1000;
+        ui.messages.clear();
+        ui.messages.add(points + " Total Points");
       }
     }
   }
@@ -132,28 +137,25 @@ class TetrisGame extends CabinetScene {
         rect(offsetX + c * blockSize, offsetY + r * blockSize, blockSize, blockSize);
       }
     }
-    for (int[] block : activerandShape) {
-      int boardX = randShapeX + block[0], boardY = randShapeY + block[1];
-      if (boardY >= 0) {
-        fill(colorPalette(randShapeType));
-        rect(offsetX + boardX * blockSize, offsetY + boardY * blockSize, blockSize, blockSize);
+      for (int[] block : activerandShape) {
+        int boardX = randShapeX + block[0], boardY = randShapeY + block[1];
+        if (boardY >= 0) {
+          fill(colorPalette(randShapeType));
+          rect(offsetX + boardX * blockSize, offsetY + boardY * blockSize, blockSize, blockSize);
+        }
       }
-    }
-    ui.draw();
-    if (gameOver) {
-      fill(255, 0, 0);
-      textAlign(CENTER, CENTER);
-      textSize(48);
+      ui.draw();
+      if (gameOver) {
+        fill(255, 0, 0);
+        textAlign(CENTER, CENTER);
+        textSize(48);
       text("GAME OVER", width / 2, height / 2);
       textSize(12);
     }
   }
 
   int colorPalette(int index) {
-    int[] palette = {
-      color(200, 0, 200), color(255, 165, 0), color(0, 0, 255),
-      color(255, 255, 0), color(0, 255, 0), color(255, 0, 0),
-      color(0, 255, 255)
+    int[] palette = {color(200, 0, 200), color(255, 165, 0), color(0, 0, 255), color(255, 255, 0), color(0, 255, 0), color(255, 0, 0), color(0, 255, 255)
     };
     return palette[index % palette.length];
   }
