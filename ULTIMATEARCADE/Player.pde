@@ -1,6 +1,6 @@
 class Player {
-  PVector pos = new PVector(200, 300);
-  KeyBinds keys = new KeyBinds();
+  private PVector pos = new PVector(200, 300);
+  private KeyBinds keys = new KeyBinds();
   void update() {
     PVector d = keys.direction();
     pos.add(d);
@@ -8,8 +8,13 @@ class Player {
     pos.y = constrain(pos.y, 60, height);
   }
   void draw() {
-    fill(255, 0, 0);
-    ellipse(pos.x, pos.y, 20, 20);
+    if (gm.playerAvatar != null) {
+      imageMode(CENTER);
+      image(gm.playerAvatar, pos.x, pos.y, 40, 40);
+    } else {
+      fill(255, 0, 0);
+      ellipse(pos.x, pos.y, 20, 20);
+    }
   }
   void key(char k, int code, boolean down) {
     keys.update(k, code, down);

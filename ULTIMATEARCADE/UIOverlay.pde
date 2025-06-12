@@ -1,5 +1,5 @@
 class UIOverlay {
-  ArrayList<String> messages = new ArrayList<String>();
+  private ArrayList<String> messages = new ArrayList<String>();
   float h = 50;
   void add(String m) {
     messages.clear();
@@ -19,6 +19,6 @@ class UIOverlay {
     }
   }
   float getHeight() {
-  return h; 
-}
+    return h; 
+  }
 }

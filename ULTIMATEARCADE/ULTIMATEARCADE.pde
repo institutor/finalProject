@@ -1,13 +1,19 @@
+import processing.sound.*;
+
 GameManager gm;
+PApplet papplet;
 
 void setup() {
   size(1920, 1080);
+  fullScreen();
+  papplet = this;
   gm = new GameManager();
   gm.init();
 }
 
 void draw() {
   gm.update();
+  gm.draw();
 }
 
 void keyPressed() {
