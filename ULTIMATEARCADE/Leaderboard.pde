@@ -19,7 +19,9 @@ class Leaderboard { // I MADE THIS B/C I WANTED TO KEEP TRACK OF PLAYER SCORES A
           entries.add(new ScoreEntry(parts[0], Integer.parseInt(parts[1])));
         }
       }
-    } catch (Exception e) {
+    } 
+    catch (Exception e) {
+      println("Error has occurred");
     }
   }
 

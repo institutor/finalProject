@@ -43,7 +43,7 @@ class MiniGolf extends CabinetScene {
       holeSound = new SoundFile(papplet, "hole.wav");
       shootSound = new SoundFile(papplet, "shoot.wav");
     } catch (Exception e) {
-      println("Could not load MiniGolf sound files.");
+      println("COULD NOT load MiniGolf sound files.");
     }
   }
 
@@ -97,7 +97,6 @@ class MiniGolf extends CabinetScene {
     if (courseComplete) {
       return;
     }
-
     if (!ballInHole) {
       bx += vx;
       by += vy;
@@ -145,13 +144,11 @@ class MiniGolf extends CabinetScene {
 
   void draw() {
     background(20, 90, 20);
-    
     if (courseComplete) {
        textAlign(CENTER, CENTER);
        fill(255);
        textSize(40);
        text("Course Complete! Final Score: " + strokes, width/2, height/2 - 200);
-       
        textSize(24);
        text("Leaderboard (Lowest Score Wins)", width/2, height/2 - 100);
        ArrayList<ScoreEntry> entries = leaderboard.getEntries();
@@ -159,12 +156,10 @@ class MiniGolf extends CabinetScene {
          ScoreEntry e = entries.get(i);
          text((i+1) + ". " + e.name + " - " + (-e.score), width/2, height/2 - 60 + i * 30);
        }
-       
        textSize(20);
        text("Press R to Play Again or Q to Quit", width/2, height/2 + 100);
        return;
     }
-    
     for (Rectangle s : sandTiles) {
       fill(210, 180, 140);
       rect(s.x, s.y, s.width, s.height);
@@ -202,7 +197,6 @@ class MiniGolf extends CabinetScene {
       textSize(12);
     }
   }
-
   void handleKey(char k, int c, boolean d) {
     if (d && (k == 'q' || k == 'Q')) {
       gm.switchScene(new HallScene());
