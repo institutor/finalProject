@@ -39,7 +39,7 @@ class NameInputScene extends Scene {
         try {
           gm.playerAvatar = loadImage("avatar.png");
         } catch (Exception e) {
-          println("Avatar loading failed.");
+          println("Avatar loading failed... Fix it");
         }
         gm.switchScene(new HallScene());
       }

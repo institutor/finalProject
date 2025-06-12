@@ -10,7 +10,7 @@ class UIOverlay {
     fill(0, 140);
     rect(0, 0, width, h);
     fill(255);
-    textSize(25);
+    textSize(14);
     textAlign(LEFT, CENTER);
     float y = h / 2 - 18 * (messages.size() - 1) / 2;
     for (String m : messages) {
