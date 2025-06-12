@@ -12,20 +12,39 @@ class MiniGolf extends CabinetScene {
   PVector holePos;
   ArrayList<Rectangle> sandTiles = new ArrayList<Rectangle>();
   ArrayList<Rectangle> iceTiles = new ArrayList<Rectangle>();
+  SoundFile hitSound, holeSound, shootSound;
+  Leaderboard leaderboard;
+  boolean courseComplete = false;
 
-  MiniGolf() { reset(); }
+  MiniGolf() {
+    reset(); 
+  }
 
   String getLabel() { 
-  return "Mini-Golf";
-}
-  int getColor() { return color(0, 200, 0); }
+    return "Mini-Golf";
+  }
+
+  int getColor() { 
+    return color(0, 200, 0); 
+  }
 
   void enter() {
+    leaderboard = new Leaderboard("minigolf_scores.txt");
+    courseComplete = false;
+    currentHole = 1;
+    reset();
     ui.messages.clear();
-    ui.messages.add("Mini-Golf  |  Drag to shoot  |  Q exit");
+    ui.messages.add("Mini-Golf  |  Drag to shoot  |  Q exit  |  P pause");
     ui.messages.add("Sand slows  |  Ice is slidey  |  Rocks bounce");
     ui.messages.add("Cup = black   Ball = white");
     setupHole();
+    try {
+      hitSound = new SoundFile(papplet, "hit.wav");
+      holeSound = new SoundFile(papplet, "hole.wav");
+      shootSound = new SoundFile(papplet, "shoot.wav");
+    } catch (Exception e) {
+      println("Could not load MiniGolf sound files.");
+    }
   }
 
   void setupHole() {
@@ -36,7 +55,7 @@ class MiniGolf extends CabinetScene {
     holeCompleteTimer = 0;
     if (currentHole == 1) {
       holePos = new PVector(width - 150, height - 150); 
-      obstacles.add(new PVector(width * .55f, height * .70f)); // f makes these numbers floats
+      obstacles.add(new PVector(width * .55f, height * .70f));
       obstacles.add(new PVector(width * .70f, height * .55f));
       obstacles.add(new PVector(width * .80f, height * .35f));
       obstacles.add(new PVector(width * .45f, height * .45f));
@@ -75,6 +94,10 @@ class MiniGolf extends CabinetScene {
   }
 
   void update() {
+    if (courseComplete) {
+      return;
+    }
+
     if (!ballInHole) {
       bx += vx;
       by += vy;
@@ -87,24 +110,23 @@ class MiniGolf extends CabinetScene {
       vy *= friction;
       if (abs(vx) < .1f) vx = 0;
       if (abs(vy) < .1f) vy = 0;
-      if (bx < 10) { bx = 10; vx *= -0.7f; }
-      if (bx > width - 10) { bx = width - 10; vx *= -0.7f; }
-      if (by < 60) { by = 60; vy *= -0.7f; }
-      if (by > height - 10) { by = height - 10; vy *= -0.7f; }
+      if (bx < 10) { bx = 10; vx *= -0.7f; if (hitSound != null) hitSound.play(); }
+      if (bx > width - 10) { bx = width - 10; vx *= -0.7f; if (hitSound != null) hitSound.play(); }
+      if (by < 60) { by = 60; vy *= -0.7f; if (hitSound != null) hitSound.play(); }
+      if (by > height - 10) { by = height - 10; vy *= -0.7f; if (hitSound != null) hitSound.play(); }
       for (PVector o : obstacles) {
         float d = dist(bx, by, o.x, o.y);
-        if (d < 35) {
-          PVector b = PVector.sub(new PVector(bx, by), o).normalize().mult(2);
-          vx = b.x;
-          vy = b.y;
-          bx = o.x + b.x * 35;
-          by = o.y + b.y * 35;
+        if (d < 40) {
+          vx *= -0.7;
+          vy *= -0.7;
+          if (hitSound != null) hitSound.play();
         }
       }
       if (dist(bx, by, holePos.x, holePos.y) < 15 && abs(vx) < 3.5f && abs(vy) < 3.5f) {
         ballInHole = true;
         vx = vy = 0;
         holeCompleteTimer = 60;
+        if (holeSound != null) holeSound.play();
       }
     } else {
       holeCompleteTimer--;
@@ -114,9 +136,8 @@ class MiniGolf extends CabinetScene {
           reset();
           setupHole();
         } else {
-          ui.messages.clear();
-          ui.messages.add("Course Complete! Final Score: " + strokes + " strokes");
-          ui.messages.add("Press Q to exit");
+          courseComplete = true;
+          leaderboard.addScore(gm.playerName, -strokes); 
         }
       }
     }
@@ -124,6 +145,26 @@ class MiniGolf extends CabinetScene {
 
   void draw() {
     background(20, 90, 20);
+    
+    if (courseComplete) {
+       textAlign(CENTER, CENTER);
+       fill(255);
+       textSize(40);
+       text("Course Complete! Final Score: " + strokes, width/2, height/2 - 200);
+       
+       textSize(24);
+       text("Leaderboard (Lowest Score Wins)", width/2, height/2 - 100);
+       ArrayList<ScoreEntry> entries = leaderboard.getEntries();
+       for(int i = 0; i < entries.size(); i++){
+         ScoreEntry e = entries.get(i);
+         text((i+1) + ". " + e.name + " - " + (-e.score), width/2, height/2 - 60 + i * 30);
+       }
+       
+       textSize(20);
+       text("Press R to Play Again or Q to Quit", width/2, height/2 + 100);
+       return;
+    }
+    
     for (Rectangle s : sandTiles) {
       fill(210, 180, 140);
       rect(s.x, s.y, s.width, s.height);
@@ -163,19 +204,18 @@ class MiniGolf extends CabinetScene {
   }
 
   void handleKey(char k, int c, boolean d) {
-    if (d && (k == 'q' || k == 'Q')) gm.switchScene(new HallScene());
+    if (d && (k == 'q' || k == 'Q')) {
+      gm.switchScene(new HallScene());
+    }
     if (d && (k == 'r' || k == 'R')) {
-      if (currentHole > totalHoles) {
-        currentHole = 1;
-        strokes = 0;
-        reset();
-        setupHole();
-      }
+      enter();
     }
   }
 
   void handleMouse(boolean p) {
-    if (ballInHole) return;
+    if (ballInHole || courseComplete) {
+      return;
+    }
     if (p) {
       if (dist(mouseX, mouseY, bx, by) < 15 && abs(vx) < .5f && abs(vy) < .5f) {
         dragging = true;
@@ -189,17 +229,23 @@ class MiniGolf extends CabinetScene {
         vy = imp.y;
         strokes++;
         holeStrokes++;
+        if (shootSound != null) {
+          shootSound.play();
+        }
       }
     }
   }
 
-  void handleDrag() { }
+  void handleDrag() {
+  }
 
   void reset() {
     bx = 200;
     by = height - 150;
     vx = vy = 0;
-    if (currentHole == 1) strokes = 0;
+    if (currentHole == 1) {
+      strokes = 0;
+    }
     holeStrokes = 0;
   }
 }

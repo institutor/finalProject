@@ -6,6 +6,11 @@ class KeyBinds {
       if (code == DOWN) down = d;
       if (code == LEFT) left = d;
       if (code == RIGHT) right = d;
+    } else {
+        if (k == 'w' || k == 'W') up = d;
+        if (k == 's' || k == 'S') down = d;
+        if (k == 'a' || k == 'A') left = d;
+        if (k == 'd' || k == 'D') right = d;
     }
   }
   PVector direction() {

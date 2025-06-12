@@ -19,6 +19,6 @@ class UIOverlay {
     }
   }
   float getHeight() {
-  return h; 
-}
+    return h; 
+  }
 }
