@@ -2,6 +2,7 @@ class GameManager {
   Scene currentScene;
   boolean paused = false;
   String playerName;
+  PImage playerAvatar;
 
   void init() {
     currentScene = new NameInputScene();

@@ -1,17 +1,17 @@
 class PongGame extends CabinetScene {
-  float playerY, enemyY;
-  float ballX, ballY, ballVX, ballVY;
-  int playerScore, enemyScore;
-  final float PADDLE_HEIGHT = 120, PADDLE_WIDTH = 20;
-  final int WIN_SCORE = 5;
-  boolean gameOver = false;
-  SoundFile hitSound;
-  SoundFile gameOverSound;
-  Leaderboard leaderboard;
-  boolean enemyIsConfused = false;
-  int enemyConfusedDirection = 1;
+  private float playerY, enemyY;
+  private float ballX, ballY, ballVX, ballVY;
+  private int playerScore, enemyScore;
+  private final float PADDLE_HEIGHT = 120, PADDLE_WIDTH = 20;
+  private final int WIN_SCORE = 5;
+  private boolean gameOver = false;
+  private SoundFile hitSound;
+  private SoundFile gameOverSound;
+  private Leaderboard leaderboard;
+  private boolean enemyIsConfused = false;
+  private int enemyConfusedDirection = 1;
 
-  String getLabel() { 
+  String getLabel() {
     return "Pong";
   }
 
@@ -31,9 +31,10 @@ class PongGame extends CabinetScene {
       hitSound = new SoundFile(papplet, "hit.wav");
       gameOverSound = new SoundFile(papplet, "gameover.wav");
     } catch(Exception e) {
-      println("asound files not found");
+      println("ping pong sound files not found.");
     }
   }
+
   void resetBall() {
     ballX = width / 2;
     ballY = height / 2;
@@ -84,7 +85,6 @@ class PongGame extends CabinetScene {
         enemyIsConfused = false;
       }
     }
-    
     if (ballX > width - 30 - PADDLE_WIDTH / 2 && ballY > enemyY - PADDLE_HEIGHT / 2 && ballY < enemyY + PADDLE_HEIGHT / 2) {
       ballVX *= -1;
       ballX = width - 30 - PADDLE_WIDTH / 2;
@@ -92,7 +92,6 @@ class PongGame extends CabinetScene {
         hitSound.play();
       }
     }
-    
     if (ballX < 0) {
       enemyScore++;
       resetBall();
@@ -101,7 +100,6 @@ class PongGame extends CabinetScene {
       playerScore++;
       resetBall();
     }
-    
     if (playerScore >= WIN_SCORE || enemyScore >= WIN_SCORE) {
       gameOver = true;
       if (gameOverSound != null) {
@@ -126,7 +124,12 @@ class PongGame extends CabinetScene {
     ellipse(ballX, ballY, 25, 25);
     rectMode(CORNER);
     if (gameOver) {
-      String winner = playerScore >= WIN_SCORE ? "YOU WIN" : "ENEMY WINS";
+      String winner = "";
+      if (playerScore >= WIN_SCORE) {
+        winner = "YOU WIN";
+      } else {
+        winner = "ENEMY WINS";
+      }
       fill(255);
       textSize(80);
       textAlign(CENTER, CENTER);

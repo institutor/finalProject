@@ -1,7 +1,7 @@
 class TetrisGame extends CabinetScene {
-  int columnCount = 10, rowCount = 20, blockSize = 40;
-  int[][] board = new int[rowCount][columnCount];
-  int[][][] pieceShapes = {
+  private int columnCount = 10, rowCount = 20, blockSize = 40;
+  private int[][] board = new int[rowCount][columnCount];
+  private int[][][] pieceShapes = {
     {{0, -1}, {0, 0}, {0, 1}, {0, 2}},
     {{0, 0}, {1, 0}, {0, 1}, {1, 1}},
     {{-1, 0}, {0, 0}, {1, 0}, {0, 1}},
@@ -10,13 +10,13 @@ class TetrisGame extends CabinetScene {
     {{-1, 1}, {0, 1}, {0, 0}, {1, 0}},
     {{-1, 0}, {0, 0}, {0, 1}, {1, 1}}
   };
-  int[][] activePiece;
-  int pieceX, pieceY, pieceType;
-  int frameTick, dropSpeed = 30;
-  boolean gameOver;
-  int points;
-  SoundFile clearSound, dropSound, themeMusic, gameOverSound;
-  Leaderboard leaderboard;
+  private int[][] activePiece;
+  private int pieceX, pieceY, pieceType;
+  private int frameTick, dropSpeed = 30;
+  private boolean gameOver;
+  private int points;
+  private SoundFile clearSound, dropSound, themeMusic, gameOverSound;
+  private Leaderboard leaderboard;
 
   String getLabel() { 
     return "Tetris"; 
@@ -42,8 +42,9 @@ class TetrisGame extends CabinetScene {
       gameOverSound = new SoundFile(papplet, "gameover.wav");
       themeMusic = new SoundFile(papplet, "music.mp3");
       themeMusic.loop();
-    } catch(Exception e) {
-      println("Could not load Tetris sound files.");
+    }
+    catch(Exception e) {
+      println("Cant  load Tetris sound files.");
     }
   }
 
@@ -108,22 +109,18 @@ class TetrisGame extends CabinetScene {
     if (pieceType == 1) {
       return;
     }
-    
     int[][] tempPiece = new int[4][2];
     for(int i=0; i < activePiece.length; i++) {
         tempPiece[i][0] = activePiece[i][0];
         tempPiece[i][1] = activePiece[i][1];
     }
-    
     for (int[] block : tempPiece) {
         int temp = block[0];
         block[0] = -block[1];
         block[1] = temp;
     }
-    
     int[][] backupPiece = activePiece;
     activePiece = tempPiece; 
-    
     if (collide(pieceX, pieceY)) {
         activePiece = backupPiece;
     }
@@ -234,7 +231,6 @@ class TetrisGame extends CabinetScene {
         textAlign(CENTER, CENTER);
         textSize(48);
         text("GAME OVER", width / 2, height / 2 - 150);
-
         textSize(24);
         text("Leaderboard", width/2, height/2 - 50);
         ArrayList<ScoreEntry> entries = leaderboard.getEntries();
@@ -246,7 +242,6 @@ class TetrisGame extends CabinetScene {
         text("Press any key to play again", width/2, height/2 + 100);
     }
   }
-
   int colorPalette(int index) {
     int[] palette = {color(0, 255, 255), color(255, 255, 0), color(128, 0, 128), color(0, 0, 255), color(255, 165, 0), color(0, 255, 0), color(255, 0, 0)};
     return palette[index % palette.length];
@@ -267,7 +262,6 @@ class TetrisGame extends CabinetScene {
       }
       return;
     } 
-    
     if (key == 'a' || key == 'A') {
       movePiece(-1);
     } else if (key == 'd' || key == 'D') {

@@ -1,13 +1,16 @@
 class HallScene extends Scene {
-  ArrayList<CabinetScene> cabinets = new ArrayList<CabinetScene>();
+  private ArrayList<CabinetScene> cabinets = new ArrayList<CabinetScene>();
   Player player = new Player();
+
   HallScene() {
     cabinets.add(new MiniGolf());
-    cabinets.get(0).cabPos = new PVector(400, height/2);
+    cabinets.get(0).cabPos = new PVector(width * 0.2f, height/2);
     cabinets.add(new TetrisGame());
-    cabinets.get(1).cabPos = new PVector(width/2, height/2);
+    cabinets.get(1).cabPos = new PVector(width * 0.4f, height/2);
     cabinets.add(new PongGame());
-    cabinets.get(2).cabPos = new PVector(width - 400, height/2);
+    cabinets.get(2).cabPos = new PVector(width * 0.6f, height/2);
+    cabinets.add(new ArcheryGame());
+    cabinets.get(3).cabPos = new PVector(width * 0.8f, height/2);
   }
 
   void update() { 

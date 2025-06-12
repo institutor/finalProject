@@ -1,5 +1,5 @@
 class KeyBinds {
-  boolean up, down, left, right;
+  private boolean up, down, left, right;
   void update(char k, int code, boolean d) {
     if (k == CODED) {
       if (code == UP) up = d;

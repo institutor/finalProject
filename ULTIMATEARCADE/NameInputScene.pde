@@ -1,5 +1,5 @@
 class NameInputScene extends Scene {
-  String playerNameInput = "";
+  private String playerNameInput = "";
 
   void update() {
   }
@@ -9,16 +9,15 @@ class NameInputScene extends Scene {
     textAlign(CENTER, CENTER);
     fill(255);
     textSize(32);
-    text("Enter Your Name:", width / 2, height / 2 - 80);
+    text("Enter Your NAME:", width / 2, height / 2 - 80);
     fill(200);
     rect(width / 2 - 200, height / 2 - 25, 400, 50);
     fill(0);
     textSize(28);
     text(playerNameInput, width/2, height/2);
-
     fill(150);
     textSize(20);
-    text("Press Enter to Begin", width / 2, height / 2 + 80);
+    text("Press enter to Begin!!!", width / 2, height / 2 + 80);
   }
 
   void handleKey(char k, int code, boolean down) {
@@ -37,6 +36,11 @@ class NameInputScene extends Scene {
     } else if (code == ENTER || code == RETURN) {
       if (playerNameInput.length() > 0) {
         gm.playerName = playerNameInput;
+        try {
+          gm.playerAvatar = loadImage("avatar.png");
+        } catch (Exception e) {
+          println("Avatar loading failed.");
+        }
         gm.switchScene(new HallScene());
       }
     }

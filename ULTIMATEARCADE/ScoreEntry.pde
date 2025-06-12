@@ -1,6 +1,6 @@
 class ScoreEntry implements Comparable<ScoreEntry> { // I MADE THIS B/C I WANTED TO KEEP TRACK OF PLAYER SCORES ACROSS GAMES
-  String name;
-  int score;
+  private String name;
+  private int score;
 
   ScoreEntry(String name, int score) {
     this.name = name;

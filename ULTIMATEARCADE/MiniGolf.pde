@@ -1,20 +1,20 @@
 class MiniGolf extends CabinetScene {
-  float bx, by, vx, vy;
-  boolean dragging;
-  PVector dragStart;
-  int strokes;
-  int holeStrokes;
-  int currentHole = 1;
-  int totalHoles = 5;
-  boolean ballInHole = false;
-  int holeCompleteTimer = 0;
-  ArrayList<PVector> obstacles = new ArrayList<PVector>();
-  PVector holePos;
-  ArrayList<Rectangle> sandTiles = new ArrayList<Rectangle>();
-  ArrayList<Rectangle> iceTiles = new ArrayList<Rectangle>();
-  SoundFile hitSound, holeSound, shootSound;
-  Leaderboard leaderboard;
-  boolean courseComplete = false;
+  private float bx, by, vx, vy;
+  private boolean dragging;
+  private PVector dragStart;
+  private int strokes;
+  private int holeStrokes;
+  private int currentHole = 1;
+  private int totalHoles = 5;
+  private boolean ballInHole = false;
+  private int holeCompleteTimer = 0;
+  private ArrayList<PVector> obstacles = new ArrayList<PVector>();
+  private PVector holePos;
+  private ArrayList<Rectangle> sandTiles = new ArrayList<Rectangle>();
+  private ArrayList<Rectangle> iceTiles = new ArrayList<Rectangle>();
+  private SoundFile hitSound, holeSound, shootSound;
+  private Leaderboard leaderboard;
+  private boolean courseComplete = false;
 
   MiniGolf() {
     reset(); 

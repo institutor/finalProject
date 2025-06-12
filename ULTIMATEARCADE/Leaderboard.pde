@@ -1,8 +1,8 @@
 import java.util.Collections;
 class Leaderboard { // I MADE THIS B/C I WANTED TO KEEP TRACK OF PLAYER SCORES ACROSS GAMES
-  ArrayList<ScoreEntry> entries;
-  String filename;
-  final int MAX_ENTRIES = 5;
+  private ArrayList<ScoreEntry> entries;
+  private String filename;
+  private final int MAX_ENTRIES = 5;
 
   Leaderboard(String filename) {
     this.filename = filename;
@@ -40,7 +40,6 @@ class Leaderboard { // I MADE THIS B/C I WANTED TO KEEP TRACK OF PLAYER SCORES A
     }
     saveScores();
   }
-
   ArrayList<ScoreEntry> getEntries() {
     return entries;
   }

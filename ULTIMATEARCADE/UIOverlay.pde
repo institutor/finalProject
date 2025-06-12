@@ -1,5 +1,5 @@
 class UIOverlay {
-  ArrayList<String> messages = new ArrayList<String>();
+  private ArrayList<String> messages = new ArrayList<String>();
   float h = 50;
   void add(String m) {
     messages.clear();
